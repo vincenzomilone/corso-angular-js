@@ -89,6 +89,13 @@
                   </script>
                 </section>
 
+                <section data-markdown data-background-color="#0084ff">
+                  <script type="text/template">
+                    # Capitolo I
+                    ## Le primitive AngularJs
+                  </script>
+                </section>
+
                 <section data-markdown>
                   <script type="text/template">
                     ## Le primitive AngularJs
@@ -453,11 +460,476 @@
                   >
                     <option value="">Seleziona una provincia</option>
                   </select>
-
                   ```
                   </script>
                 </section>
 
+                 <section data-markdown>
+                  <script type="text/template">
+                  ng-class (1/2)
+                  
+                  <small>Permette di aggiungere o rimuovere una o più classi CSS ad un elemento.</small>
+
+                  <small>Esempio: vogliamo aggiungere una classe CSS `btn--active` a un bottone quando questo è attivo</small>
+                  ```html
+                  <label>Questo corso è interessante?</label>
+                  <button
+                    class="btn"
+                    ng-click="_my.response = 'Si'"
+                    ng-class="{'btn--active': _my.response === 'Si'}"
+                  >
+                    Si
+                  </button>
+                  <button
+                      class="btn"
+                      ng-click="_my.response = 'Assolutamente si'"
+                      ng-class="{'btn--active': _my.response === 'Assolutamente si'}"
+                    >
+                      Assolutamente si
+                  </button>
+                  ```
+
+                  [Play](https://codepen.io/_vik/pen/GWmYzy) <!-- .element: class="btn fragment" target="_blank" -->
+                  </script>
+                 </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  ng-class (2/2)
+
+                  <small>Esistono diversi modi di utilizzare `ng-class`</small>
+                  
+                  ```html
+                  <!-- Oggetto -->
+                  <button ng-class="{'btn--active': _my.isActive, 'btn--disabled': _.my.isDisabled}">
+                    Bottone 1
+                  </button>
+                  <!-- Stringa -->
+                  <article class="post" ng-class="{'post-id'+_my.post.id}">
+                    ...
+                  </article>
+                  <!-- Funzione -->
+                  <article ng-class="_my.getPostClasses(_my.post)">
+                    ...
+                  </article>
+                  ```
+                  </script>
+                 </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  ng-style (1/3)
+
+                  Permette di assegnare stile `inline` a un elemento. 
+                  
+                  Utile, ad esempio, per creare uno slideshow di immagini
+
+                  </script>
+                 </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  ng-style (2/3)
+
+                  <small>Come si relizza un semplice slideshow:</small>
+
+                  <img data-src="/images/slideshow-preparazione.jpg" class="fragment" style="max-width: 420px">
+
+                  <img data-src="/images/slideshow-slide-spostata.jpg" class="fragment" style="max-width: 420px">
+
+                  </script>
+                 </section>
+
+                  <section data-markdown>
+                    <script type="text/template">
+                    ng-style (3/3)
+
+                    ```html
+                    <div class="slideshow">
+                      <div class="slides" ng-style="_my.slideshowStyle">
+                        <div class="slide" ng-repeat="image in _my.images track by $index">
+                          <img ng-src="{{image}}" alt="">
+                    ```
+
+                    [Play](https://codepen.io/_vik/pen/jBmQbo) <!-- .element class="btn fragment" target="_blank" -->
+
+                    </script>
+                  </section>
+
+                 <section data-markdown data-background-color="#0084ff">
+                  <script type="text/template">
+                    # Capitolo II
+                    ## La struttura di un'applicazione AngularJs
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    Un'applicazione AngularJs è divisa in:
+                    * module <!-- .element class="fragment" -->
+                    * contoller <!-- .element class="fragment" -->
+                    * service <!-- .element class="fragment" -->
+                    * factory <!-- .element class="fragment" -->
+                    * directive <!-- .element class="fragment" -->
+                    * constant <!-- .element class="fragment" -->
+                    * value <!-- .element class="fragment" -->
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `module` (1/3)
+
+                  Dalla documentazione ufficile AngularJs:
+
+                  Si può vedere un modulo come un contenitore di diverse parti dell'applicazione: controller, service, direttive, ... <!-- .element class="small fragment" -->
+
+                  La maggior parte delle applicazioni hanno un metodo principale (main) che mette insieme le diverse parti dell'app. <!-- .element class="small fragment" -->
+
+                  AngularJS non ha un metodo principale. Invece è la dichiarazione dei moduli a specificare come l'app dovrebbe esseere eseguita. <!-- .element class="small fragment" -->
+
+                  Questo approccio ha diversi vantaggi. Il principale è che puoi creare moduli indipendenti e riusabili. <!-- .element class="small fragment" -->
+
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `module` (2/3)
+
+                  In realtà abbiamo già visto come si dichiara un modulo
+
+                  ```javascript
+                  angular
+                    .module('nomeModulo', [])
+                  ```
+
+                  Introduciamo il concetto di dipendenze:
+
+                  ```javascript
+                  angular
+                    .module('nomeModulo', [
+                      'ngAnimation',
+                      'ngSanitize'
+                    ])
+                  ```
+
+                  `ngAnimation`, `ngSanitize` e ngCookie sono **moduli** di AngularJs che userete *sempre* nelle vostre app.
+
+                  </script>
+                </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  `module` (3/3)
+
+                  *Moduli riusabili*: immaginiamo di dover sviluppare un'app per la gestione di un blog.
+
+                  <div class="small">
+                  Possiamo dividere l'app in due moduli principali:
+                  * gestione utenti, che chiameremo `ngUsers`
+                  * gestione posts, `ngPosts`
+                  </div>
+                  La dichiarazione della nostra app sarà:
+
+                  ```javascript
+                  angular
+                    .module('ngUsers', [])
+                    .module('ngPosts', [])
+                    .module('ngBlog', [
+                      'ngAnimation',
+                      'ngSanitize',
+                      'ngUsers',
+                      'ngPosts'
+                    ])
+                  ```
+
+                  Note:
+                  .module('ngUsers', []) e .module('ngUsers') hanno due significati *molto* diversi
+
+                  </script>
+                </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  `controller`
+
+                  In angular un controller è una funzione javascript contenente la **business logic** dell'app.
+
+                  Un controller appartiene a un modulo:
+
+                  ```javascript
+                  angular
+                    .module('ngUsers')
+                    .controller('UsersController', UsersController);
+                  
+                  function UsersController() {
+                    /* Logica di business */
+                  }
+                  ```
+
+                  </script>
+                 </section>
+                
+                <section data-markdown>
+                  <script type="text/template">
+                  `service` (1/2)
+
+                  Una `service` è un'oggetto javascript che viene instanziato come `singleton`
+                  e utilizzato in uno o più controller
+
+                  Solitamente vengono utilizzati per operazioni come:
+                  * estrarre i dati da una fonte
+                  * effettuare una chiamata una webservice e restituire il dato
+
+                  </script>
+                 </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `service` (2/2)
+
+                  Anche le service appartengono a un modulo
+
+                  ```javascript
+                  angular
+                    .module('ngUsers', [])
+                    .service('UsersModel', UsersModel);
+                  
+                  function UsersModel() {
+                    this.getUsers = function() {
+                      /* Restituisce tutti o parte gli utenti */
+                    }
+                    this.getUser = function(userId) {
+                      /* Restituire un singolo utente */
+                    }
+                  }
+                  ```
+                  
+                  Quindi, nel nostro controller:
+                  
+                  ```javascript
+                  function UsersController(UsersModel) {
+                    this.users = UsersModel.getUSers();
+                  }
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `factory`
+
+                  Anche se una `service` e una `factory` sono diverse a livello
+                  tecnico, all'atto pratico hanno lo stesso comportamento.
+
+                  ```javascript
+                  angular
+                    .module('ngUsers')
+                    .factory('UsersFactory', UsersFactory);
+                  
+                  function UsersFactory() {
+                    function getUsers() {
+                      /* Restituisce tutti o parte gli utenti */
+                    }
+                    function getUser(userId) {
+                      /* Restituire un singolo utente */
+                    }
+                    return {
+                      'getUsers': getUsers,
+                      'getUser': getUser
+                    }
+                  }
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `directive` (1/6)
+
+                  Si tratta di un **nodo chiave** dell'approccio AngularJs allo sviluppo di applicazioni web.
+
+                  Per capire di cosa si tratti, vediamo subito come si dichiara una direttiva:
+
+                  ```javascript
+                  angular
+                    .module('ngUsers')
+                    .directive('UsersList', UsersListDirective);
+
+                  function UsersListDirective() {
+                    return {
+                      restrict: 'E',
+                      templateUrl: 'users/list.html',
+                      controller: 'UsersController',
+                      controllerAs: '_users'
+                    }
+                  }
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `directive` (2/6)
+
+                  Da qualche parte nel nostro codice html
+                  
+                  ```html
+                    <section class="section--user-list">
+                      <users-list></users-list>
+                    </section>
+                  ```
+
+                  Dentro `<users-list>` verrà appeso il contenuto del template presente in `users/list.html`
+                  
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `directive` (3/6)
+
+                  Vediamo nel dettalgio:
+                  <ul class="small">
+                    <li class="fragment">`restrict` è una stringa che indica ad AngularJs se la nostra direttiva è un elemento HTML o un attributo</li>
+                      <ul>
+                        <li class="fragment">'E' --> elemento `<users-list></user-list>`</li>
+                        <li class="fragment">'A' --> attributo `<div user-list></div>`</li>
+                        <li class="fragment">'AE' --> entrambi, *sconsigliato*</li>
+                      </ul>
+                    <li class="fragment">`templateUrl` indica ad AngularJs dove trovare il template della direttiva</li>
+                    <li class="fragment">
+                      `template`, alternativa a `templateUrl`, permette di dichiarare il template come stringa (consigliato *solo* per direttive molto semplici)
+                      
+                      <pre><code>
+                      template: '<ul><li ng-repeat="user in _users.users track by $index">...</li></ul>'
+                      </code></pre>
+                    
+                    </li>
+                    <li class="fragment">`controller`, il controller associato alla direttiva</li>
+                    <li class="fragment">`controllerAs`, il mome con cui riferire il controller nel template</li>
+                  </ul>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `directive` (4/6)
+
+                  Perché sono così importanti le direttive?
+
+                  <ol>
+                    <li class="fragment">Permettono di scrivere codice *estremante* riusabilie.</li>
+                    <li class="fragment">Facilitano un'approccio "divide et impera", dove ogni direttiva ha una responsabilità limitata.</li>
+                  </ol>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `directive` (5/6)
+
+                  <small>Riprendiamo l'esmpio di `<users-list>`. Questo è il template:</small>
+                  
+                  ```html
+                  <ul class="users-list">
+                    <li
+                      ng-repeat="user in _users.users track by $index"
+                      users-list-item
+                    >
+                    </li>
+                  </ul>
+                  ```
+
+                  <small>Dove la nuova direttiva `userListItem` si occuperà di stampare i dati un singolo utente.</small>
+
+                  <p class="fragment">Ma come fa la `userListItem` a sapere *quale* utente rappresentare della lista?</p>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `directive` (6/6)
+
+                  <small>Possiamo passare un dato alla direttiva con `bindToController`</small>
+
+                  ```html
+                  <li ng-repeat="user in _users.users track by $index"
+                      users-list-item
+                      user-model="user"
+                  >
+                  ```
+
+                  ```javascript
+                    angular
+                      .module('ngUsers')
+                      .directive('usersListItem', usersListItemDirective);
+
+                    function usersListItem() {
+                      return {
+                        restrict: 'A',
+                        template: '<span class="user-list-item">{{_user.userModel.firstName}} {{_user.userModel.lastName}}</span>'
+                        controller: 'UserController',
+                        controllerAs: '_user',
+                        bindToController: {
+                          userModel: '@'
+                        }
+                      }
+                    }
+                  ```
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `constant`
+
+                  Permette di definire delle constanti, siano esse stringe, numeri o oggetti.
+                  ```javascript
+                  angular
+                    .module('ngUsers')
+                    .constant('apiKey', 'a12mdks93skjk22')
+                    .constant('userRoles', {
+                      ADMIN: 'Administrator',
+                      DEV: 'Developer',
+                      BASE: 'Base'
+                    });
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$inject`
+
+                  Si tratta di una funzionalità di AngularJs che permette di "passare" a un funzione, es un `controller` le sude dipendnenze
+
+                  ```javascript
+                  angular
+                    .module('ngUsers', [])
+                    .constant('userRoles', {
+                      ADMIN: 'Amministatore',
+                      DEV: 'Sviluppatore'
+                    })
+                    .controller('UsersController', ['userRoles', UsersController]);
+                  
+                  function UsersController(userRoles)  {
+                    this.userRoles = userRoles;
+                  }
+                  ```
+                  
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Nuova slide
+                  </script>
+                </section>
             </div>
         </div>
         <script src="node_modules/headjs/dist/1.0.0/head.min.js"></script>

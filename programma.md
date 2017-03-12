@@ -27,18 +27,17 @@ Inclusi esempi d'uso di base dei vari punti.
     - ng-disabled (https://codepen.io/_vik/pen/LWZMvO)
     - ng-submit (https://codepen.io/_vik/pen/mWEaZz)
     - ng-options (https://codepen.io/_vik/pen/MpeLbJ)
-    - ng-change 
-    - ng-class
-    - ng-style    
+    - ng-change NO ESEMPIO
+    - ng-class (https://codepen.io/_vik/pen/GWmYzy)
+    - ng-style (https://codepen.io/_vik/pen/jBmQbo)
 * La struttura di un'applicazione AngularJs
     - module
     - controller
     - service e factory
     - directive
     - constant
-    - value
-* $scope e $inject
-* $watch
+* $inject
+* $scope e $watch
 * eventi ($emit, $broadcast, $on)
 * $apply
 * Perché **non** usare lo $scope
