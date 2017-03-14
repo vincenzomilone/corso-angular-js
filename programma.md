@@ -39,12 +39,11 @@ Inclusi esempi d'uso di base dei vari punti.
 * $inject
 * $scope e $watch
 * eventi ($emit, $broadcast, $on)
-* $apply
-* Perché **non** usare lo $scope
-* $scope, $element, e la (terribile e potentissima) combinazione AngularJs/jQuery
-* $filter
+* Perché **non** usare lo $scope (https://codepen.io/_vik/pen/NpgeKK)
+* $element (https://codepen.io/_vik/pen/wJeRgv)
+* $apply LO GUARDEREI DOPO
+* $filter (https://codepen.io/_vik/pen/YZQdJb)
 * Chiamate AJAX, $http e *promise*
-* Http Interceptor
 
 ## L'universo delle Web application
 
@@ -56,8 +55,8 @@ Inclusi esempi d'uso di base dei vari punti.
 * Le componenti bower indispensabili:
     - lodash
     - moment.js
-    - angular-sanitize, angular-touch e angular-cookies
-    - angular-translate
+    - angular-sanitize, angular-animate e angular-touch
+    - angular-translate LO INTRODURREI PIÙ AVANTI
     - *accenno a* bootstrap e angular-bootstrap   
 
 ## UI Router

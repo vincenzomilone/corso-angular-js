@@ -35,7 +35,7 @@
             .reveal .small {
               font-size: 0.6em;
             }
-            .hljs-attr {
+            .hljs-attr, .hljs-selector-class {
               color: #d56f3e;
             }
         </style>
@@ -572,7 +572,7 @@
                     * factory <!-- .element class="fragment" -->
                     * directive <!-- .element class="fragment" -->
                     * constant <!-- .element class="fragment" -->
-                    * value <!-- .element class="fragment" -->
+                    * ... <!-- .element class="fragment" -->
                   </script>
                 </section>
 
@@ -711,7 +711,7 @@
                   
                   ```javascript
                   function UsersController(UsersModel) {
-                    this.users = UsersModel.getUSers();
+                    this.users = UsersModel.getUsers();
                   }
                   ```
                   </script>
@@ -922,6 +922,595 @@
                   }
                   ```
                   
+                  </script>
+                </section>
+                
+                <section data-markdown>
+                  <script type="text/template">
+                  `$scope` (1/5)
+
+                  Lo `$scope` è il *cuore pulsante* di AngularJs
+
+                  Funziona da ponte fra la logica applicativa (controller, etc)
+                  e la vista (DOM)
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$scope` (2/5)
+
+                  ```javascript
+                  .controller('HiController', ['$scope', HiController])
+                  function HiController($scope) {
+                    $scope.hi = 'Ciao ciao';
+                    $scope.aFunction = function() {...}
+                  }
+                  ```
+
+                  ```html
+                  <div ng-controller="HiController">
+                    <p>{{ hi }}</p>
+                    <a ng-click="aFunction()">Click here</a>
+                  </div>
+                  ```
+
+                  <small class="fragment">Come mai fin ora non si è mai utilizzato?</small>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$scope` (3/5)
+
+                  Lo `$scope` è gerarchico.
+
+                  ```html
+                  <!-- Nello $scope abbiamo una variabile users -->
+                  <ul class="user-list">
+                    <li ng-repeat="user in users track by $index">
+                      <!-- Nello $scope abbiamo una variabile user -->
+                      {{ user.firstName }} {{ user.lastName }}
+                      <!-- ma, abbiamo visibilità anche di users! -->
+                    </li>
+                  </ul>
+                  ```
+
+                  </script>
+                </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  Fare grafico sulle gerarchia dello $scope
+                  </script>
+                </section>
+
+                
+                <section data-markdown>
+                  <script type="text/template">
+                  `$watch` (1/3)
+
+                  Lo `$scope` ci offre potenti strumenti, il primo fra tutti è
+                  `$scope.$watch()`, che ci permette di eseguire una funzione
+                  quando una variabile "osservata" cambia il suo valore.
+
+                  <pre class="fragment"><code class="javascript">
+                  $scope.users = [...]
+                  $scope.doSomething = function(users) {...}
+                  $scope.$watch('users', function(newValue, oldValue) {
+                    //Il nuovo valore si trova in newValue
+                    doSomething(newValue);
+                  })                    
+                  </code></pre>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$watch` (2/3)
+
+                  Ci permette anche di "osservare" il risultato
+                  di una funzione.
+
+                  <pre class="fragment"><code class="javascript">
+                  $scope.users = [...]
+                  $scope.$watch(function() {
+                    return $scope.users.length;
+                  }, function(newValue, oldValue) {
+                    // La lunghezza di user è cambiata!
+                  })                    
+                  </code></pre>
+
+                  </script>
+                </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  `$watch` (3/3)
+
+                  E persino oggetti complessi.
+
+                  <pre class="fragment"><code class="javascript">
+                  $scope.user = {
+                    firstName: 'Vincenzo',
+                    lastName: 'Milone'
+                  }
+                  $scope.$watch('user', function(newValue, oldValue) {
+                    // Una proprietà di user è cambiata!
+                  }, true);                    
+                  </code></pre>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Eventi `$scope`
+
+                  Grazie alla sua struttura gerarirca, è possibile sollevare
+                  e catturare eventi esattamente come accade nel DOM.
+
+                  <pre class="fragment"><code class="javascript">
+                  // nomeEvento1 verrà inviato verso i figli, fino alle foglie
+                  $scope.$emit('nomeEvento1', dati);
+                  
+                  // nomeEvento2 verrà inviato verso i padri, fino alla radice
+                  $scope.$emit('nomeEvento2', dati);
+
+                  // cattura l'evento nomeEvento3 con i dati allegati
+                  $scope.$on('nomeEvento3', function($event, dati) {
+                    ...
+                  });
+                  </code></pre>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Perché *non* usare lo `$scope` (1/4)
+
+                  Negli esempi fatti fin ora ho sempre evitato di usare lo `$scope`
+                  preferendo il `this` all'interno del controller.
+
+                  Vediamo perché.
+
+                  </script>
+                </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  Perché *non* usare lo `$scope` (2/4)
+
+                  ```javascript
+                  angular
+                    .module('myApp', [])
+                    .controller('firstController', ['$scope', firstController])
+                    .controller('secondController', ['$scope', secondController])
+
+                  function firstController($scope) {
+                      $scope.myVar = 10;
+                  }
+
+                  function secondController($scope) {
+                      $scope.myVar = $scope.myVar + 10;
+                  }
+                  ```
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Perché *non* usare lo `$scope` (3/4)
+
+                  ```html
+                  <div ng-controller="firstController">
+                    <div ng-controller="secondController">
+                      <p>{{ myVar }}</p>
+                    </div>
+                  </div>
+                  
+                  <div ng-controller="secondController">
+                    <p>{{ myVar }}</p>
+                  </div>
+                  ```
+                  
+                  [Cosa verrà stampato?](https://codepen.io/_vik/pen/NpgeKK) <!-- .element class="btn fragment" target="_blank" -->
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Perché *non* usare lo `$scope` (4/4)
+
+                  Usare il `controllerAs` anziché direttamente lo `$scope`
+                  evita situazioni ambigue, e facilita la separazione delle
+                  responsabilità fra componenti.
+
+                  Questo approccio diventa un **must** in applicazioni complesse e di
+                  grandi dimensioni.
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$element`
+
+                  <small>`$element` rappresenta l'oggetto DOM a cui è "attaccato"
+                  il controller o la direttiva in esecuzine.</small>
+
+                  <small>In realtà è un oggetto **jqLite**, che ci fornisce alcune funzioni
+                  come addClass(), append(), etc...</small>
+
+                  ```javascript
+                  .controller('myController', ['$element', myController]);
+
+                  function myController($element) {
+                    $element.addClass('my-css-class');
+                  }
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$filter` (1/3)
+
+                  Permette di applicare un **filtro** a una variabile.
+
+                  Un filtro è una funzione di *trasformarzione* dati.
+
+                  ```
+                  <!-- Nel controller -->
+                  $scope.filtered = $filter('nomeFiltro')(varibileDaFiltrare)
+                  <!-- Direttamente nella vista -->
+                  <p ng-bind="varibileDaFiltrare | nomeFiltro"></p>
+                  ```
+
+                  <div class="fragment">
+                    I filtri sono facilmente concatenabili
+                    
+                    <pre><code>
+                    <p ng-bind="varibileDaFiltrare | nomeFiltro1 | nomeFiltro2 | ..."></p>
+                    </code></pre>
+                  </div>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$filter` (2/3)
+
+                  Un tipico esempio di filtro è un campo di ricerca
+                  che *filtra* (scusate il gioco di parole) una serie di risultati.
+
+                  Torniamo al nostro esempio degli utenti:
+                  
+                  [Play](https://codepen.io/_vik/pen/XMgoYZ) <!-- .element class="btn" target="_blank" -->
+                  </script>
+                 </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$filter` (3/3)
+
+                  Oppure possiamo scrivere un nostro filtro:
+
+                  ```javascript
+                  .filter('alQuadrato', function() {
+                    return function(input) {
+                      return input*input;
+                    }
+                  });
+                  ```
+
+                  [Play](https://codepen.io/_vik/pen/YZQdJb) <!-- .element class="btn" target="_blank" -->
+
+                  </script>
+                 </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$q` (1/2)
+
+                  `$q` ci permette di eseguire funzioni in modo *asincrono* e di utilizzare
+                  il valore restituito da queste funzioni **solo quando** l'esecuzione è terminata.
+
+                  <p class="fragment">`$q` restituisce una **promessa**, un oggetto che verrà:</p>
+                  <ul>
+                    <li class="fragment">**risolto** quando la funzione asincrona avrà finito la sua esecuzione,</li>
+                    <li class="fragment">**rifiutato** quando la funzione asincrona verrà terminata con un errore.</li>
+                  </ul>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$q` (2/2)
+
+                  Un oggetto `promise` espone una funzione `then` che viene automaticamente
+                  sollevata quando la promessa viane risolta o rifiutata.
+
+                  ```javascript
+                  function asincrona() {
+                    var d = $q.deferr();
+                    try {
+                      //Fai qualcosa di asincrono o un timeout
+                      ...
+                      d.resolve(dati);
+                    } catch(e) {
+                      //Oh no, c'è stato un errore
+                      d.reject(e);
+                    }
+                    return d.promise;
+                  }
+
+                  var promise = asincrona();
+                  promise.then(
+                    function(dati) {
+                      //La promessa è stata risolta, possiamo usare dati
+                      $scope.myVar = dati;
+                    },
+                    function(error) {
+                      //La promessa è stata rifiutata, gestiamo l'errore
+                    }
+                  )
+                  ```
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$http`
+
+                  <small>Un tipico uso di `promise` è rappresentato nelle chiamate AJAX,
+                  che in AngularJs si effettuano con la service `$http`.</small>
+
+                  <small>`$http` permette di effettuare una chiamata GET, POST, etc e 
+                  restituisce una promessa legata alla chiamata stessa.</small>
+
+                  
+                  <pre class="fragment">
+                  <code>function getUsers() {
+                    return $http.get('/api/v1/users');
+                  }
+                  </code></pre>
+
+                  <pre class="fragment">
+                  <code>UsersModel.getUsers().then(function(response) {
+                    //L'ogetto response rappresenta la risposta del server
+                    $scope.users = response.body.users;
+                  }, function(error) {
+                    //La chiamata è stata rifiutata, ad esempio un tiemout 
+                    //della chiamata HTTP
+                  })
+                  </code></pre>
+
+                  </script>
+                </section>
+
+                <section data-markdown data-background-color="#0084ff">
+                  <script type="text/template">
+                    # Capitolo III
+                    
+                    ## L'universo delle Web application
+                    
+                    Una breve introduzione
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Quello dello sviluppo di "Web application" è un universo, all'interno del
+                  quale AngularJs è solo un tassello.
+                  <div class="fragment">
+                    ![Stack](/images/stack.jpg)
+
+                    <small>Fonte: https://www.linkedin.com/pulse/fintech-recipes-tech-concoction-mbas-jds-amilcar-chavarria</small>
+                  </div>
+                  </script>
+                </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  ## CSS pre-processor
+
+                  <small>`sass` e `less` sono due CSS **pre-processor** che permettono di scrivere CSS in maniera più conincisa, riusabile e *leggibile*</small>
+
+                  <pre class="fragment">
+                  <code class="scss">@mixin full-background($background) {
+                    background-image: url($background);
+                    background-position: 50% 50%;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                  }
+                  $title-size: 24px;
+
+                  .hero {
+                    @include full-background('/img/background-image.jpg');
+                    .hero__title {
+                      font-size: $title-size;
+                    }
+                  }
+                  </code></pre>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Risultato CSS
+                  
+                  ```css
+                  .hero {
+                    background-image: url("/img/background-image.jpg");
+                    background-position: 50% 50%;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                  }
+                  .hero .hero__title {
+                    font-size: 24px;
+                  }
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Versionamento del codice
+
+                  Per introdurre `git` ci vorrebbe un workshop a parte. 
+
+                  In breve, `git` è la risposta alle seguenti domande:
+
+                  * Come gestisco il codice se due o più persone devono lavorare sugli stessi file? <!-- .element class="fragment small" -->
+                  * Come tengo traccia delle modifiche fatte fin ora? <!-- .element class="fragment small" -->
+                  * Come differenzio il codice presente nell'ambiente di test (nuovi sviluppi) da quello di produzione (stabile e testato)? <!-- .element class="fragment small" -->
+                  
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Gestione pacchetti
+
+                  Vogliamo aggiungere l'ultima versione di AngularJs al nostro progetto:
+                  * andiamo su https://angularjs.org
+                  * scarichiamo l'ultima versione
+                  * aggiungiamo il file scaricato alla cartella `scripts`
+                  * includiamo lo script <small><code>&lt;script src="scripts/angular.min.js"&gt;&lt;/script&gt;</code></small>
+
+                  <p class="fragment" style="color: #cc0000; font-size: 4rem; text-align: center">Sbagliato!!!</p>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `npm` e `bower`
+
+                  <small>Si tratta di due *package manager* che ci permettono di aggiungere/rimuovere componenti
+                  al nostro progetto senza preoccuparci troppo della versione e della provenienza.</small>
+
+                  Per installare AngularJs è sufficiente:
+                  ```
+                  bower install angular --save
+                  ```
+
+                  Quando passerete il progetto a un collega (`git`), gli basterà
+                  ```
+                  bower install
+                  ```
+                  per installare tutti i pacchetti salvati.
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Le componenti bower indispensabili
+
+                  Ci sono alcuni pacchetti di cui non potrete fare a meno nello 
+                  sviluppo di applicativi Web.
+
+                  Il primo fra tutti è `lodash`, il quale ci fornisce una serie 
+                  di strumenti per la manipolazione di oggetti, array, etc ect
+
+                  ```
+                  bower install lodash --save
+                  ```
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `lodash`
+
+                  Giusto per darvi un'idea della comodità di `lodash`:
+                  
+                  ```javascript
+                  /* Voglio rimuovere dalla lista degli utenti,
+                  ** coloro che hanno ruolo di amministratore
+                  */
+                  _.remove($scope.users, function(user) {
+                    return user.role === "ADMIN";
+                  })
+                  ```
+                  
+                  ```javascript
+                  /* Voglio essere sicuro che nella lista degli utenti,
+                  ** non ci siano duplicati 
+                  */
+                  $scope.users = _.uniq($scope.users);
+                  ```
+                  
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `moment`
+
+                  Tralasciando la sfortunata scelta di *naming*, 
+                  `moment` ci facilita nella gestione delle date, risolvendo problemi come il fuso orario e la localizzazione.
+                  
+                  ```
+                  bower install moment --save
+                  ```
+
+                  ```javascript
+                  moment.locale('it'); 
+                  moment("2017-12-12").fromNow();
+                  --> "tra 9 mesi"
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `angular-*`
+
+                  AngularJs fornisce diversi pacchetti non inclusi nel *core* che sono
+                  necessari in ogni web application
+
+                  ```
+                  bower install angular-sanitize angular-animate angular-touch --save
+                  ```
+
+                  <ul class="small">
+                    <li class="fragment">`angular-sanitize` (ngSanitize), come esprime il nome del modulo sanitizza le stringhe che stampiamo nell'HTML, evitando problemi di sicurezza</li>
+                    <li class="fragment">`angular-animate` (ngAnimate), permette di relizzare animazioni CSS legate ad eventi Angular</li>
+                    <li class="fragment">`angular-touch` (ngTouch), migliora il supporto di dispositivi *touch-enabled* offrendo primitive come ng-swipe-left/ng-swipe-right</li>
+                  </ul>
+                  
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `ngBootstrap`
+
+                  Si tratta di un modulo che implementa in AngularJs le funzionalità del famoso framework **Bootstrap**.
+                  ```
+                  bower install angular-bootstrap --save
+                  ```
+
+                  <div class="small">
+                  <p>Ci offre una serie di utili direttive come</p>
+                  <ul>
+                    <li>`uib-accordion`</li>
+                    <li>`uib-datepicker`</li>
+                    <li>`uib-dropdown`</li>
+                    <li>`uib-modal`</li>
+                    <li>...</li>
+                  </ul>
+                  </div>
                   </script>
                 </section>
 
