@@ -3,42 +3,8 @@
         <link rel="stylesheet" href="node_modules/reveal.js/css/reveal.css">
         <link rel="stylesheet" href="node_modules/reveal.js/css/theme/white.css">
         <link rel="stylesheet" href="css/zenburn.css">
+        <link rel="stylesheet" href="css/style.css">
         <title>AngularJs</title>
-        <style>
-            .reveal h1 {
-              font-size: 1.8em;
-              color: #0084ff;
-            }
-            .reveal h2 {
-              color: #0084ff;
-            }
-            .reveal section img {
-              border: 0;
-              box-shadow: none;
-            }
-            .reveal blockquote {
-              width: auto;
-            }
-            .reveal .btn {
-              display: inline-block;
-              background-color: #0084ff;
-              color: #fff;
-              padding: 12px 25px;
-              text-transform: uppercase;
-              border-radius: 3px;
-              font-size: 0.9em;
-            }
-            .reveal .btn:hover {
-              background-color: #006ba6;
-              color: #fff;
-            }
-            .reveal .small {
-              font-size: 0.6em;
-            }
-            .hljs-attr, .hljs-selector-class {
-              color: #d56f3e;
-            }
-        </style>
     </head>
     <body>
         <div class="reveal">
@@ -1511,6 +1477,191 @@
                     <li>...</li>
                   </ul>
                   </div>
+                  </script>
+                </section>
+
+                <section data-markdown data-background-color="#0084ff">
+                  <script type="text/template">
+                    # Capitolo IV
+                    
+                    ## UI Router
+                    
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Routing
+
+                  Il `routing` è un'approccio allo sviluppo di Web application per il quale è la URL a guidare il comportamento dell'applicazione.
+
+                  <div class="fragment">
+                  Ad esempio, i nei framework PHP la URL è così formata
+                  `/nomeController/nomeFunzione`
+
+                  <pre>
+                  <code class="php">// URL -> /users/list
+                  class Users extends Controller {
+                    ...
+                    public function list() {
+
+                    }
+                    ...
+                  }
+                  </code></pre>
+                  </div>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## UI Router
+
+                  Questo approccio è il più utilizzato nello sviluppo di applicazioni AngularJs. 
+
+                  A tal proposito ci viene in aiuto il modulo UI Router 
+                  ```
+                  bower install angular-ui-router@1.0.0-beta.3
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Stati
+
+                  UI Router permette di associare a una URL, o meglio ad un path,
+                  uno **stato**
+
+                  Ogni stato è così definito: <!-- .element class="fragment" -->
+
+                  <div class="fragment panel">
+                    <header class="panel__header">Stato</header>
+                    <div class="panel__body">
+                      <ul>
+                        <li>Nome</li>
+                        <li class="fragment">URL</li>
+                        <li class="fragment">Controller</li>
+                        <li class="fragment">Controller as</li>
+                        <li class="fragment">Template/TemplateUrl</li>
+                      </ul>
+                    </div>
+                  </div>
+
+
+
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$stateProvider`
+
+                  `$stateProvider` è l'oggetto che UI Router ci fornisce per la gestione e definizione degli stati.
+
+                  ```javascript
+                  //Creazione stato "Home"
+                  $stateProvider.state('home', {
+                    url: '/home',
+                    controller: 'HomeController',
+                    controllerAs: 'home',
+                    templateUrl: 'home.html'
+                  })
+                  ```
+
+                  ```html
+                  <!-- Nel nostro file index.html -->
+                  <div ui-view></div>
+                  ```
+
+                  <small class="fragment">La direttiva `ui-view`, alla url <mark>/home</mark>, verrà sostituita da `home.html` gestita da HomeController</small>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Viste
+
+                  <small>UI Router ci permette di associare a uno stato più *viste*, utile se vogliamo suddividere il nostro layout
+                  in più parti, come "contenuto" e "sidebar"</small>
+                  
+                  <div style="display: table">
+                    <div style="display: table-cell; width: 50%">
+                      <pre class="fragment"><code class="html"><!-- index.html -->
+                  <div class="layout">
+                    <main ui-view="content"></main>
+                    <aside ui-view="sidebar"></aside>
+                  </div>
+                      </code></pre>
+                    </div>
+                    <div style="display: table-cell; width: 50%">
+                      <pre class="fragment"><code class="javascript">// app.js
+                  $stateProvider.state('home', {
+                    url: '/home',
+                    views: {
+                      'content': {
+                        controller: 'HomeController',
+                        controllerAs: 'home',
+                        templateUrl: 'home.html'
+                      },
+                      'sidebar': {
+                        templateUrl: 'sidebar.html'
+                      }
+                    }
+                  })
+                      </code></pre>
+                    </div>
+                  </div>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Gerarchia stati
+
+                  UI Roter ci permette di create stati e sotto-stati.
+
+                  **Esempio** vogliamo creare 2 stati:
+                  1. lista utenti --> <mark>/users</mark>
+                  2. dettaglio utente --> <mark>/users/detail</mark>
+                  
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  1 Lista utenti /users
+
+                  Prima registriamo lo stato **padre**
+                  ```javascript
+                  $stateProvider.state('users', {
+                    url: '/users',
+                    controller: 'UsersController',
+                    controllerAs: '_users',
+                    templateUrl: 'users.html'
+                  })
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  2 Dettaglio utente /users/list
+
+                  Quindi lo stato **figlio**
+                  ```javascript
+                  $stateProvider.state('users.detail', {
+                    url: '/detail',
+                    controller: 'UserController',
+                    controllerAs: '_user',
+                    templateUrl: 'user-detail.html'
+                  })
+                  ```
+
+                  Alcune *note*:
+                  * lo stato figlio si caratterizza dal **nome**, nella forma `nomePadre.nomeFiglio`
+                  * la URL dello stato figlio si compone di quella del padre e della propria
                   </script>
                 </section>
 

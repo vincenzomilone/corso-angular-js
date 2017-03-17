@@ -1,0 +1,55 @@
+.reveal h1 {
+  font-size: 1.8em;
+  color: #0084ff;
+}
+.reveal h2 {
+  color: #0084ff;
+}
+.reveal section img {
+  border: 0;
+  box-shadow: none;
+}
+.reveal blockquote {
+  width: auto;
+}
+.reveal .btn {
+  display: inline-block;
+  background-color: #0084ff;
+  color: #fff;
+  padding: 12px 25px;
+  text-transform: uppercase;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.reveal .btn:hover {
+  background-color: #006ba6;
+  color: #fff;
+}
+.reveal .small {
+  font-size: 0.6em;
+}
+.hljs-attr, .hljs-selector-class {
+  color: #d56f3e;
+}
+.reveal .panel {
+  border: 3px solid #0084ff;
+  background-color: #7abeff;
+  color: #0e61af;
+  border-radius: 9px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 0.8em;
+}
+.panel .panel__header {
+  padding: 20px;
+  background-color: #0084ff;
+  color: #fff;
+  text-transform: uppercase 
+}
+.panel .panel__body {
+  padding: 20px;
+}
+.reveal .panel ul {
+  margin-left: 0;
+}
