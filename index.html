@@ -1481,6 +1481,25 @@
                   </script>
                 </section>
 
+                <section data-markdown>
+                  <script type="text/template">
+                  `gulp`
+
+                  Si tratta di un *task runner*: uno strumento che esegue alcuni compiti che eseguiti a mano richiderebbe troppo tempo.
+
+                  Un esempio è il task che converte automaticamente i file .LESS in file .CSS
+
+                  ```javascript
+                  gulp.task('less', function () {
+                    return gulp.src('**/*.less')
+                      .pipe(less())
+                      .pipe(gulp.dest('./dist/css'));
+                  });
+                  ```
+
+                  </script>
+                </section>
+
                 <section data-markdown data-background-color="#0084ff">
                   <script type="text/template">
                     # Capitolo IV
@@ -1548,10 +1567,6 @@
                       </ul>
                     </div>
                   </div>
-
-
-
-
                   </script>
                 </section>
 
@@ -1726,8 +1741,345 @@
 
                 <section data-markdown>
                   <script type="text/template">
+                  Stato principale
+
+                  Definiamo lo stato principale
+
+                  ```javascript
+                  $stateProvider
+                    .state('app', {
+                      url: '',        
+                      views: {
+                        'layout': {
+                          templateUrl: 'app/main/main.html',
+                          controller: 'MainController',
+                          controllerAs: 'main'
+                        }
+                      }
+                    });
+                  ```                    
                   </script>
-                </section>                  
+                </section>   
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Stato principale: la vista
+
+                  
+                  ```html
+                  <!-- index.html -->
+                  <body>
+                    <div ui-view="layout"></div>
+                  </body>
+                  ```
+
+                  ```html
+                  <!-- main.html -->
+                  <main ui-view="main"></main>
+                  <aside ui-view="sidebar"></aside>
+                  ```
+
+                  </script>
+                </section> 
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Stato figlio
+                  
+                  "Dentro" la `ui-view="main"` avremo
+                  ```html
+                  <!-- Parte comune -->
+                  <h1>{{ $users.list }}</h1>
+                  <!-- Parte specifica -->
+                  <div ui-view="content"></div>
+                  ```
+                  
+                  </script>
+                </section>
+                                
+                <section data-markdown>
+                  <script type="text/template">
+                  Stato figlio: `app.users`
+
+                  Dovrà occuparsi di 3 viste: main, sidebar e content
+
+                  ```javascript
+                  $stateProvider
+                    .state('app.users', {
+                      url: '/users',        
+                      views: {
+                        'main@app': {
+                          templateUrl: 'app/users/users.html',
+                          controller: 'UsersController',
+                          controllerAs: '$users'
+                        },
+                        'sidebar@app': {
+                          template: '<p>Sidebar</p>'
+                        },
+                        'content@app.users': {
+                          templateUrl: 'app/users/list/list.html'
+                        }
+                      }
+                    });
+                  ```
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Stato figlio: `app.users.detail`
+
+                  Lo stato foglia dovrà sovrascrivere solo la vista content
+
+                  ```javascript
+                  $stateProvider
+                    .state('app.users.detail', {
+                      url: '/:userId',        
+                      views: {
+                        'content@app.users': {
+                          templateUrl: 'app/users/detail/detail.html',
+                          controller: 'UserDetailController',
+                          controllerAs: '$user'
+                        }
+                      }
+                    });
+                    ```
+
+                    [Esempio completo](https://github.com/vincenzomilone/corso-angular-01) <!-- .element class="fragment btn" target="_blank" -->
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Cambi di stato
+
+                  Per passare da uno stato un'altro abbiamo diverse possibilità
+
+                  <div class="fragment">
+                  1 - Con un semplice link
+                  <pre><code class="html">
+                  <a href="/users">Lista utenti</a>
+                  <a href="/users/42">Dettaglio utente 42</a>
+                  <a ng-href="{{ '/users/'+userId }}">Dettaglio utente {{ userId }}</a>
+                  </code></pre>
+                  </div>
+
+                  <div class="fragment">
+                  2 - Con la direttiva `ui-sref`
+                  <pre><code class="html">
+                  <a ui-sref="app.users">Lista utenti</a>
+                  <a ui-sref="app.users.detail({userId: 42})">Dettaglio utente 42</a>
+                  <a ui-sref="app.users.detail({userId: userId})">Dettaglio utente {{ userId }}</a>
+                  </code></pre>
+                  </div>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  3 - Tramite l'oggetto `$state`
+
+                  ```javascript
+                  function UsersController($state) {
+                    this.goToDetail = function(userId) {
+                      $state.go('app.users.detail', {'userId': userId});
+                    }
+                  }
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$state` ci fornisce altre utili funzionalità oltre a `.go()`
+
+                  ```javascript
+                  // Riferimento allo stato attuale
+                  $state.current
+                  --> $state.current.name nome stato attuale
+
+                  // includes()
+                  $state.includes('app.users')
+                  --> return true se siamo in /users e /users/:userId
+
+                  // is()
+                  $state.is('app.users')
+                  --> return true solo se siamo in /users
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Eventi
+
+                  UI-Router rende disponibili alcuni eventi che vengono sollevati
+                  durente le transizioni fra uno stato e un altro.
+
+                  Il più interessante è `$stateChangeStart`, utile per bloccare
+                  un cambio di stato.
+
+                  ```javascript
+                  $rootScope.$on('$stateChangeStart', 
+                  function(event, toState, toParams, fromState, fromParams, options){ 
+                      if( !userIsLoggedIn() ) {
+                        event.preventDefault();
+                        $state.go('app.login');
+                      }
+                  });
+                  ```
+
+                  </script>
+                </section>
+
+                <section data-markdown class="small">
+                  <script type="text/template">
+                  Lista eventi disponibili
+
+
+                  | Nome evento | Quando viene sollevato |
+                  |-------------|------------------------|
+                  |`$stateChangeStart`|All'inizio di una transizione di stato|
+                  |`$stateChangeSuccess`|Alla fine di una transizione avvenuta con sucesso|
+                  |`$stateNotFound`|Lo stato di arrivo non è stato trovato|
+                  |`$stateChangeError`|Quando si verifica un errore durante la transizione|
+                  |`$viewContentLoading`|All'inizio del *rendering* del DOM di una vista|
+                  |`$viewContentLoaded`|Dopo che il DOM di una vista è stato renderizzato|
+                  
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Resolve
+
+                  **Caso**: non voglio che lo stato `app.users` sia visibile finché la lista degli utenti non stata scaricata dal server.
+
+                  Ma la chiamata `getUsers()` è asincrona, come faccio ad aspettare che sia conclusa?
+                  </script>
+                </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  `resolve` permette di passare al Controller associato il risultato di una *promessa*
+
+                  <small>Si chiama `resolve` perché prima *risolve* la promessa, quindi inizializza il Controller</small>
+
+
+                  ```javascript
+                  $stateParams.state('app.users' {
+                    url: '/users',
+                    views: {...},
+                    resolve: {
+                      usersList: ['UsersModel', function(UsersModel) {
+                        return UsersModel.getUsers();
+                      }]
+                    }
+                  })
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Quindi nel controller
+
+                  ```javascript
+                  function UsersController(usersList) {
+                    this.users = usersList;
+                  }
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Possiamo risolvere più promesse e mappare i risultati
+                  in diversi oggetti
+                  
+                  ```javascript
+                  $stateParams.state('app.users' {
+                    url: '/users',
+                    views: {...},
+                    resolve: {
+                      usersList: ['UsersModel', function(UsersModel) {
+                        return UsersModel.getUsers();
+                      }],
+                      currentUser: ['UserModel', function(UserModel) {
+                        return UserModel.getCurrentUserDetail();
+                      }]
+                    }
+                  })
+                  ```
+
+                  ```javascript
+                  function UsersController(usersList, currentUser) {
+                    ...
+                  }
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `onEnter` e `onExit` sono due funzioni che vengono sollevate quando si *entra* in uno stato e quando si *esce* dallo stato stesso.
+                  
+                  <small>Queste funzioni hanno accesso a tutti gli oggetti *risolti* da *resolve*</small>
+
+                  ```javascript
+                  $stateParams.state('app.users' {
+                    url: '/users',
+                    views: {...},
+                    resolve: {...},
+                    onEnter: function(userList, currentUser) {
+                      alert(currentUser.firstName+' benvenuto in app.users ');
+                    }
+                    onExit: function(userList, currentUser) {
+                      alert(currentUser.firstName+' stai abbandonando in app.users ');
+                    }
+                  })
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown data-background-color="#0084ff">
+                  <script type="text/template">
+                  # Capitolo V
+
+                  ## Struttura dei sorgenti
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Come mettere insieme moduli, controller, servizi, template, task di gulp ...?
+
+                  Ci sono alcune "buone norme", in parte consigliate dal team di AngularJs e in parte
+                  nate dall'esperienza e dalla condivisione sul web.
+
+                  [Struttura](/struttura-sorgenti.html) <!-- .element class="btn fragment" target="blank" -->
+                  </script>
+                </script>
+
+                <section data-markdown data-background-color="#0084ff">
+                  <script type="text/template">
+                  # Capitolo VI
+
+                  ## Applicazioni di esempio
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  |Applicazione|Scopo|Link|
+                  |------------|-----|----|
+                  |I applicazione|Mostrare l'uso di UI-Router|[Link](/da-fare)
+                  |II applicazione|Applicazione che recupera una lista di utenti dal server e la mostra|[Link](/da-fare)
+                  </script>
+                </section>
 
                 <section data-markdown>
                   <script type="text/template">

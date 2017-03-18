@@ -61,9 +61,14 @@ Inclusi esempi d'uso di base dei vari punti.
 
 ## UI Router
 
+Lo sviluppo secondo il paradigma di *routing*.
+
+UI-Router:
 * stati
 * views
 * resolve
+
+[Applicazione di esempio](https://github.com/vincenzomilone/corso-angular-01)
 
 ## Struttura dei sorgenti
 
