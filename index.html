@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
     <head>
         <link rel="stylesheet" href="node_modules/reveal.js/css/reveal.css">
@@ -1521,7 +1522,7 @@
 
                   A tal proposito ci viene in aiuto il modulo UI Router 
                   ```
-                  bower install angular-ui-router@1.0.0-beta.3
+                  bower install angular-ui-router --save
                   ```
                   </script>
                 </section>
@@ -1667,6 +1668,69 @@
 
                 <section data-markdown>
                   <script type="text/template">
+                  ## Parametri di stato
+
+                  La url `/users/detail` non ci da alun indizio riguardo quale utente stiamo mostrando.
+
+                  Sarebbe più utile `/users/1` o `/users/42`, dove 1 o 42 è l'<mark>id</mark>
+                  dell'utente.
+                  
+                  <pre class="fragment">
+                  <code class="javascript" data-noescape>$stateProvider.state('users.detail', {
+                    url: <mark>'/:userId'</mark>,
+                    controller: 'UserController',
+                    controllerAs: '_user',
+                    templateUrl: 'user-detail.html'
+                  })
+                  </code></pre>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$stateParams`
+
+                  Come utilizziamo il valore di `/:userId` nel controller?
+
+                  <pre class="fragment">
+                  <code class="javascript">angular
+                    .module('ngUsers')
+                    .controller('UserController', ['$stateParams', 'UsersModel', '$scope'], UserController);
+                  </code></pre>
+
+                  <pre class="fragment">
+                  <code class="javascript">function UserController($stateParams, UsersModel, $scope) {
+                    UsersModel
+                      .getUserById($stateParams.userId)
+                      .then(function(userData) {
+                        $scope.userDetail = userData;
+                      });
+                  }
+                  </code></pre>
+                    
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Sotto-viste
+
+                  <small>Abbiamo visto che è possibile associare a uno stato più viste, come ad esempio `content` e `sidebar`</small>
+
+                  Ora analizziamo il caso di un layout *molto* complesso:
+                  
+                  <img class="fragment" data-src="/images/layout-complesso.jpg">
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  </script>
+                </section>                  
+
+                <section data-markdown>
+                  <script type="text/template">
                   Nuova slide
                   </script>
                 </section>
@@ -1680,6 +1744,7 @@
               progress: true,
               history: true,
               center: true,
+              mouseWheel: true,
               dependencies: [
                 { src: 'node_modules/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
                 { src: 'node_modules/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },

@@ -5,25 +5,27 @@ Corso "Sviuluppo di applicazioni web client: AngularJs"
 Potete leggere il [programma del corso](/programma.md) o visualizzare
 la presentazione.
 
-In tal caso è necessario prima installare a livello globale `http-server`
-(o potete utilizzare un'[altro server qualsiasi](https://gist.github.com/willurd/5720255))
-```
-npm install -g http-server
-```
+## Presentazione
 
-Quindi installate le dipendenze:
+Installate le dipendenze:
 ```
 npm install
 ```
 
-Lanciate il server dalla cartella principlae
+e lanciate server
 ```
-http-server -p 3000
+npm start
 ```
 
 Quindi aprite il vostro browser preferito alla url
 ```
-http://localhost:300/
+http://localhost:8080/
+
 ```
+## Applicazioni di esempio
+
+Nel corso sono presenti alcune applicazioni di esempio:
+1. Utilizzo di UI-Router in un [layout complesso](https://github.com/vincenzomilone/corso-angular-01)
+2. ...
 
 [Vincenzo](https://twitter.com/_vik)
