@@ -77,21 +77,14 @@ Come *mettere insieme* tutti i pezzi tenendo in ordine il codice.
 
 Integrazione del framework Bootstrap nel frontend.
 
-## Prima applicazione
+## Applicazioni di esempio
 
-Un'esempio di applicazione che mostra un elenco di dati ricevuti dal server.
-
-## Seconda applicazione
-
-Vista "modifica dati" e gestione del routing con ui-router (stati, sotto-stati e resolve)
-
-## Terza applicazione
-
-Uso di filtri, form di ricerca e modali. Sincronizzazione con il server.
-
-## Quarta applicazione
-
-Gestione internalizzazione (angular-translate e moment.js).
+|Applicazione|Scopo|Link|
+|------------|-----|----|
+|I applicazione|Mostrare l'uso di UI-Router <small>(già vista in precedenza)</small>|[Link](https://github.com/vincenzomilone/corso-angular-01)
+|II applicazione|Applicazione che recupera una lista di utenti dal server e la mostra|[Link](https://github.com/vincenzomilone/corso-angular-02)
+|III applicazione|Modifica di un utente. Validare una form.|[Link](https://github.com/vincenzomilone/corso-angular-03)
+|IV applicazione|Internalizzazione dell'app|[Link](https://github.com/vincenzomilone/corso-angular-04)
 
 ## Argomenti avanzati
 
