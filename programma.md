@@ -21,18 +21,19 @@ Inclusi esempi d'uso di base dei vari punti.
     - ng-repeat (https://codepen.io/_vik/pen/YZwzYr)
     - ng-change ???
     - ng-show e ng-hide (https://codepen.io/_vik/pen/zZrYmK)
-    - ng-if NO ESEMPIO
+    - ng-if
     - ng-switch (https://codepen.io/_vik/pen/jBWEGq)
     - ng-required (https://codepen.io/_vik/pen/MpeZEW)
     - ng-disabled (https://codepen.io/_vik/pen/LWZMvO)
     - ng-submit (https://codepen.io/_vik/pen/mWEaZz)
     - ng-options (https://codepen.io/_vik/pen/MpeLbJ)
-    - ng-change NO ESEMPIO
+    - ng-change
     - ng-class (https://codepen.io/_vik/pen/GWmYzy)
     - ng-style (https://codepen.io/_vik/pen/jBmQbo)
 * La struttura di un'applicazione AngularJs
     - module
     - controller
+    - config
     - service e factory
     - directive
     - constant

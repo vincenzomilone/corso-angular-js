@@ -535,6 +535,7 @@
                     Un'applicazione AngularJs è divisa in:
                     * module <!-- .element class="fragment" -->
                     * contoller <!-- .element class="fragment" -->
+                    * config <!-- .element class="fragment" -->
                     * service <!-- .element class="fragment" -->
                     * factory <!-- .element class="fragment" -->
                     * directive <!-- .element class="fragment" -->
@@ -545,7 +546,7 @@
 
                 <section data-markdown>
                   <script type="text/template">
-                  `module` (1/3)
+                  `module` (1/4)
 
                   Dalla documentazione ufficile AngularJs:
 
@@ -563,7 +564,7 @@
 
                 <section data-markdown>
                   <script type="text/template">
-                  `module` (2/3)
+                  `module` (2/4)
 
                   In realtà abbiamo già visto come si dichiara un modulo
 
@@ -589,7 +590,7 @@
 
                  <section data-markdown>
                   <script type="text/template">
-                  `module` (3/3)
+                  `module` (3/4)
 
                   *Moduli riusabili*: immaginiamo di dover sviluppare un'app per la gestione di un blog.
 
@@ -618,6 +619,26 @@
                   </script>
                 </section>
 
+                <section data-markdown>
+                  <script type="text/template">
+                  `module` (4/2)
+
+                  `module` svolge sia una funzione di *getter* che di *setter*.
+                  
+                  ```javascript
+                  /* Queste due forme hanno diverso significato! */
+                  // Setter
+                  angular.module('ngUsers', [])
+                  // Getter
+                  angular.module('ngUsers')
+                  ```
+
+                  Utile se all'inizio del codice vogliamo definire un modulo (*getter*) e più avanti 
+                  vogliamo farne uso (*setter*).
+
+                   </script>
+                 </section>
+
                  <section data-markdown>
                   <script type="text/template">
                   `controller`
@@ -635,6 +656,26 @@
                     /* Logica di business */
                   }
                   ```
+
+                  </script>
+                 </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `config`
+
+                  È una funzione che viene eseguita *prima* che i controller vengano
+                  instanziati. Utile per impostare opzioni o configurazioni di vario genere.
+
+                  ```javascript
+                  angular
+                    .module('ngUsers')
+                    .config(usersConfig);
+                  
+                  function usersConfig() {
+                    /* Configurazioni */
+                  }
+                  ```  
 
                   </script>
                  </section>
@@ -853,6 +894,35 @@
 
                 <section data-markdown>
                   <script type="text/template">
+                  `directive` senza `controller`
+
+                  <small>In caso di una direttiva molto semplice possiamo fare a meno di un controller.</small>
+
+                  <small>Invece possiamo usare la funzione `link()`, la quale viene automaticamente chiamata
+                  prima che la direttiva venga "renderizzata"</small>
+
+                  ```javascript
+                    angular
+                      .module('ngUsers')
+                      .directive('superSimple', superSimpleDirective);
+
+                    function superSimpleDirective() {
+                      return {
+                        restrict: 'A',
+                        templateUrl: 'super-simple.html',
+                        link: function($scope, $element, $attrs) {
+                          /* A breve vedremo $scope, $element e $attrs */
+                        }
+                      }
+                  }
+                  ```
+                                      
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
                   `constant`
 
                   Permette di definire delle constanti, siano esse stringe, numeri o oggetti.
@@ -873,7 +943,7 @@
                   <script type="text/template">
                   `$inject`
 
-                  Si tratta di una funzionalità di AngularJs che permette di "passare" a un funzione, es un `controller` le sude dipendnenze
+                  Si tratta di una funzionalità di AngularJs che permette di "passare" a un funzione, es un `controller` le su dipendnenze
 
                   ```javascript
                   angular
@@ -894,7 +964,7 @@
                 
                 <section data-markdown>
                   <script type="text/template">
-                  `$scope` (1/5)
+                  `$scope` (1/3)
 
                   Lo `$scope` è il *cuore pulsante* di AngularJs
 
@@ -905,7 +975,7 @@
 
                 <section data-markdown>
                   <script type="text/template">
-                  `$scope` (2/5)
+                  `$scope` (2/3)
 
                   ```javascript
                   .controller('HiController', ['$scope', HiController])
@@ -928,7 +998,7 @@
 
                 <section data-markdown>
                   <script type="text/template">
-                  `$scope` (3/5)
+                  `$scope` (3/3)
 
                   Lo `$scope` è gerarchico.
 
@@ -945,13 +1015,6 @@
 
                   </script>
                 </section>
-
-                 <section data-markdown>
-                  <script type="text/template">
-                  Fare grafico sulle gerarchia dello $scope
-                  </script>
-                </section>
-
                 
                 <section data-markdown>
                   <script type="text/template">
@@ -1018,9 +1081,20 @@
                   Grazie alla sua struttura gerarirca, è possibile sollevare
                   e catturare eventi esattamente come accade nel DOM.
 
-                  <pre class="fragment"><code class="javascript">
+                  ![](/images/emit-broadcast.png)
+
+                  Fonte: [Angular Zen](https://www.packtpub.com/books/content/angular-zen)
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$broadcast`, `$emit` e `$on`
+
+                  <pre><code class="javascript">
                   // nomeEvento1 verrà inviato verso i figli, fino alle foglie
-                  $scope.$emit('nomeEvento1', dati);
+                  $scope.$broadcast('nomeEvento1', dati);
                   
                   // nomeEvento2 verrà inviato verso i padri, fino alla radice
                   $scope.$emit('nomeEvento2', dati);
@@ -1030,7 +1104,7 @@
                     ...
                   });
                   </code></pre>
-
+                  
                   </script>
                 </section>
 
@@ -1182,7 +1256,7 @@
 
                 <section data-markdown>
                   <script type="text/template">
-                  `$q` (1/2)
+                  `$q` (1/3)
 
                   `$q` ci permette di eseguire funzioni in modo *asincrono* e di utilizzare
                   il valore restituito da queste funzioni **solo quando** l'esecuzione è terminata.
@@ -1198,7 +1272,7 @@
 
                 <section data-markdown>
                   <script type="text/template">
-                  `$q` (2/2)
+                  `$q` (2/3)
 
                   Un oggetto `promise` espone una funzione `then` che viene automaticamente
                   sollevata quando la promessa viane risolta o rifiutata.
@@ -1216,20 +1290,30 @@
                     }
                     return d.promise;
                   }
-
-                  var promise = asincrona();
-                  promise.then(
-                    function(dati) {
-                      //La promessa è stata risolta, possiamo usare dati
-                      $scope.myVar = dati;
-                    },
-                    function(error) {
-                      //La promessa è stata rifiutata, gestiamo l'errore
-                    }
-                  )
                   ```
 
                   </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  `$q` (3/3)
+
+                  Con l'uso della funzione `then()` possiamo recuperare il risultato.
+
+                  ```javascript
+                  var promise = asincrona();
+                    promise.then(
+                      function(dati) {
+                        //La promessa è stata risolta, possiamo usare dati
+                        $scope.myVar = dati;
+                      },
+                      function(error) {
+                        //La promessa è stata rifiutata, gestiamo l'errore
+                      }
+                    )
+                    ```
+                    </script>
                 </section>
 
                 <section data-markdown>
@@ -1252,7 +1336,7 @@
                   <pre class="fragment">
                   <code>UsersModel.getUsers().then(function(response) {
                     //L'ogetto response rappresenta la risposta del server
-                    $scope.users = response.body.users;
+                    $scope.users = response.data.users;
                   }, function(error) {
                     //La chiamata è stata rifiutata, ad esempio un tiemout 
                     //della chiamata HTTP
@@ -1845,9 +1929,32 @@
                       }
                     });
                     ```
+                  </script>
+                </section>
 
-                    [Esempio completo](https://github.com/vincenzomilone/corso-angular-01) <!-- .element class="fragment btn" target="_blank" -->
+                <section data-markdown>
+                  <script type="text/template">
+                  Si puà fare anche meglio:
 
+                  se definiamo la vista "sidebar" nello stato principale "app", non dovremmo poi ri-definirla
+                  nei vari sotto-stati, essendo uguale per tutta l'applicazione
+
+                  ```javascript
+                  $stateProvider
+                    .state('app', {
+                      url: '',        
+                      views: {
+                        'layout': {
+                          templateUrl: 'app/main/main.html',
+                          controller: 'MainController',
+                          controllerAs: 'main'
+                        },
+                        'sidebar@app': {
+                          template: '<p>Sidebar</p>'
+                        }
+                      }
+                    });
+                  ```   
                   </script>
                 </section>
 
