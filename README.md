@@ -25,7 +25,11 @@ http://localhost:8080/
 ## Applicazioni di esempio
 
 Nel corso sono presenti alcune applicazioni di esempio:
-1. Utilizzo di UI-Router in un [layout complesso](https://github.com/vincenzomilone/corso-angular-01)
-2. ...
+|Applicazione|Scopo|Link|
+|------------|-----|----|
+|I applicazione|Mostrare l'uso di UI-Router <small>(già vista in precedenza)</small>|[Link](https://github.com/vincenzomilone/corso-angular-01)
+|II applicazione|Applicazione che recupera una lista di utenti dal server e la mostra|[Link](https://github.com/vincenzomilone/corso-angular-02)
+|III applicazione|Modifica di un utente. Validare una form.|[Link](https://github.com/vincenzomilone/corso-angular-03)
+|IV applicazione|Internalizzazione dell'app|[Link](https://github.com/vincenzomilone/corso-angular-04)
 
 [Vincenzo](https://twitter.com/_vik)

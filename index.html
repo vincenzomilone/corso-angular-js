@@ -56,476 +56,20 @@
                   </script>
                 </section>
 
+                <section data-markdown>
+                  <script type="text/template">
+                    ## Two way data binding
+                    
+                    Il punto di forza di AngularJs è il "Two Way Data Binding".
+
+                    <img data-src="images/One_Way_Data_Binding.png"><img data-src="images/Two_Way_Data_Binding.png">
+                  
+                  </script>
+                </section>
+
                 <section data-markdown data-background-color="#0084ff">
                   <script type="text/template">
                     # Capitolo I
-                    ## Le primitive AngularJs
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                    ## Le primitive AngularJs
-
-                    Le primitive AngularJs sono attributi da assegnare
-                    ai nostri elementi HTML per integrare le funzionalità
-                    di Angular
-
-                    <pre><code data-noescape>
-                      &lt;div <mark>class="classe-css"</mark>&gt;...&lt;div&gt;
-                      &lt;img <mark>src="url-immagine"</mark>&gt;
-                    </code></pre>
-
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                    ng-app e ng-controller
-
-                    `ng-app` indica al sistema il nome dell'applicazione AngularJs da eseguire
-
-                    ```html
-                    <body ng-app="myApp">
-                      <div ng-controller="myController as _my">
-                        <p>{{ _my.hi }}</p>
-                      </div>
-                    </body>
-                    ```
-                   
-                    <a href="https://codepen.io/_vik/pen/OpMLqx" class="btn" target="_blank">Play</a>
-
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                    ng-model e ng-bind
-
-                    ```html
-                    <body ng-app="myApp">
-                      <div ng-controller="myController as _my">
-                        <input type="text" ng-model="_my.hi">
-                        <p ng-bind="_my.hi"></p>
-                      </div>
-                    </body>
-                    ```
-                   
-                    <a href="https://codepen.io/_vik/pen/dvGyGO" class="btn" target="_blank">Play</a>
-
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                    ng-click
-
-                    ```html
-                    <body ng-app="myApp">
-                      <div ng-controller="myController as _my">
-                        <input type="text" ng-model="_my.hi">
-                        <p ng-bind="_my.hi"></p>
-                        <button ng-click="_my.hi = 'buongiorno'">Buongiorno</button>
-                        <button ng-click="_my.reset()">Reset</button>
-                      </div>
-                    </body>
-                    ```
-                   
-                    <a href="https://codepen.io/_vik/pen/Vpewjp" class="btn" target="_blank">Play</a>
-
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                    ng-repeat
-
-                    ```html
-                    <body ng-app="myApp">
-                      <div ng-controller="myController as _my">
-                        <ul>
-                          <li ng-repeat="user in _my.users track by $index">
-                            {{ user.firstName }}
-                            <a ng-click="_my.deleteUser($index, user)">&times;</a>
-                          </li> 
-                        </ul>
-                      </div>
-                    </body>
-                    ```
-
-                    <div class="fragment" style="font-size: 0.5em">
-                    **Fondamentale**: sempre fornire un 
-                    `track by` perché migliora le
-                    prestazioni di ng-repeat. Può essere $index
-                    (indice dell'array) o una proprietà degli
-                    elementi, come id. Nel secondo caso dobbiamo
-                    assicurarci che non ci siano duplicati nell'array
-                    </div>
-                   
-                    <a href="https://codepen.io/_vik/pen/YZwzYr" class="btn fragment" target="_blank">Play</a>
-
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                    ng-show e ng-hide
-
-                    <small>Vogliamo nascondere gli utenti che hanno cognome troppo corto, meno di 4 lettere</small>
-
-                    ```html
-                    <body ng-app="myApp">
-                      <div ng-controller="myController as _my">
-                        <ul>
-                          <li 
-                            ng-repeat="user in _my.users track by $index" 
-                            ng-hide="user.lastName.length < 4"
-                          >
-                            {{ user.firstName }}
-                          </li> 
-                        </ul>
-                      </div>
-                    </body>
-                    ```
-
-                    <div class="fragment" style="font-size: 0.5em">
-                    **Attenzione**: l'elemento viene mostrato/nascosto via CSS `display: none !important`
-                    </div>
-                   
-                    <a href="https://codepen.io/_vik/pen/zZrYmK" class="btn fragment" target="_blank">Play</a>
-
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                    ng-if
-
-                    <small>Riprendiamo l'esempio precedente. Se il controllo è "falso", l'emento non sarà visibile nell'HTML (nel codice vedremo solo una riga commentata)</small>
-
-                    ```html
-                    <body ng-app="myApp">
-                      <div ng-controller="myController as _my">
-                        <ul>
-                          <li 
-                            ng-repeat="user in _my.users track by $index" 
-                            ng-if="user.lastName.length > 3"
-                          >
-                            {{ user.firstName }}
-                          </li> 
-                        </ul>
-                      </div>
-                    </body>
-                    ```
-
-                  </script>
-                </section>
-                
-                <section data-markdown>
-                  <script type="text/template">
-                    ng-switch (1/2)
-
-                    Se i nostri utenti hanno un ruolo, vogliamo stampare: 
-                    * in grassetto gli utenti "ADMIN"
-                    * in corsivo i "DEVELOPER"
-                    * normale tutti gli altri
-                    
-
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                    ng-switch (2/2)
-
-                    ```html
-                    <body ng-app="myApp">
-                      <div ng-controller="myController as _my">
-                        <ul>
-                          <li 
-                            ng-repeat="user in _my.users track by $index" 
-                            ng-switch="user.role"
-                          >
-                            <strong ng-switch-when="ADMIN">
-                              {{ user.firstName }} (amministratore)
-                            </strong>
-                            <em ng-switch-when="DEVELOPER">
-                              {{ user.firstName }} (sviluppatore)
-                            </em>
-                            <span ng-switch-default>
-                              {{ user.firstName }}
-                            </span>
-                          </li> 
-                        </ul>
-                      </div>
-                    </body>
-                    ```
-
-                    <small class="fragment">Per funzionare un elemento `ng-switch-default` è necessario
-                    <a href="https://codepen.io/_vik/pen/jBWEGq" class="btn fragment" target="_blank">Play</a>
-                  </script>
-                </section>
-
-                 <section data-markdown>
-                  <script type="text/template">
-                    ng-required
-                  
-                    <img data-src="images/form_ng-required.png">
-                  
-                    Vogliamo che il campo "P. IVA" sia *required* solo se la checkbox è selezionata
-                    <a href="https://codepen.io/_vik/pen/MpeZEW" class="btn fragment" target="_blank">Play</a>
-
-                    <small class="fragment">Dare sempre feedback agli utenti: rendiamo evidenti i campi che sono (o diventano) obbligatori</small>
-
-                  </script>
-                </section>
-                
-                
-                <section data-markdown>
-                  <script type="text/template">
-                    ng-disabled
-
-                    Riprendiamo l'esempio precedente: non vogliamo che l'utente possa inviare la form finché non compila il campo "Nome e cognome"
-
-                    ```html
-                    ...
-                    <button 
-                      ng-disabled="!_my.user.fullName" 
-                      type="submit" 
-                      class="btn btn-primary"
-                    >
-                      Invia
-                    </button>
-                    ```
-                    
-                    <a href="https://codepen.io/_vik/pen/LWZMvO" class="btn fragment" target="_blank">Play</a>
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                    ng-submit
-
-                    Permette di eseguire una funzione quando la form viene *inviata* (submitted)
-
-                    ```html
-                    <form 
-                      ng-submit="_my.submit()"
-                      class="form-horizontal"
-                    >
-                      ...
-                    </form>
-                    ```
-
-                    [Play](https://codepen.io/_vik/pen/mWEaZz) <!-- .element: class="btn fragment" target="_blank" -->
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                  ng-options (1/3)
-
-                  Si utilizza nelle `<select>` per valizzare i campi `<option>`
-                  
-                  Permette di valorizzare sia l'attributo `value` che la *label* mostrata all'utente
-                  ```html
-                  <select>
-                    <option value="1">Descrizione 1</option>
-                    <option value="2">Descrizione 2</option>
-                    ...
-                  </select>
-                  ```
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                  ng-options (2/3)
-
-                  Prendiamo un `array` contenente i possibili ruoli da assegnare ad un utente
-                  
-                  ```javascript
-                      this.userRoles = [
-                        {
-                          'id': 'ADMIN',
-                          'description': 'Amministratore' 
-                        },
-                        {
-                          'id': 'DEVELOPER',
-                          'description': 'Sviluppatore' 
-                        },
-                        {
-                          'id': 'BASE',
-                          'description': 'Altro' 
-                        }
-                      ]
-                          
-                  ```
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                  ng-options (3/3)
-
-                  ```html
-                  <select 
-                    ng-model="_my.user.role"
-                    ng-options="role.id as role.description for role in _my.userRoles"
-                  >
-                    <option value="">Seleziona ruolo</option>
-                  </select>
-                  <p ng-bind="_my.user.role"></p>
-                  ```
-                  
-                  NB: <!-- .element class="fragment small" -->
-
-                  <ul class="small">
-                    <li class="fragment">nella variabile associata a `ng-model` verrà salvato l'id</li>
-                    <li class="fragment">un'opzione vuota `<option value=""></option>` è sempre necessaria
-                  </ul>
-
-                  [Play](https://codepen.io/_vik/pen/MpeLbJ) <!-- .element: class="btn fragment" target="_blank" -->
-                  </div>
-
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                  ng-change (1/2)
-
-                  Permette di eseguire una funzione quando un dato campo di input cambia il proprio valore
-                  a seguito di un'azione dell'utente. 
-
-                  Di solito si utilizza per svolgere una logica quando l'utente seleziona
-                  un valore di una `<select>`
-
-                  </script>
-                </section>
-
-                <section data-markdown>
-                  <script type="text/template">
-                  ng-change (2/2)
-
-                  Esempio classico: abbiamo due select con Regione e Provincia, quando l'utente seleziona una certa Regione è necessario filtrare le Province <!-- .element: class="small" -->
-
-                  ```html
-                  <select
-                    name="regione"
-                    ng-model="_my.user.area"
-                    ng-change="_my.updateProvinceList()"
-                    ng-options="area.id as area.description for area in _my.areaList"
-                  >
-                    <option value="">Seleziona una regione</option>
-                  </select>
-                  <select
-                    name="provincia"
-                    ng-disabled="!_my.user.area"
-                    ng-model="_my.user.province"
-                    ng-options="province.id as province.description for province in _my.provinceList"
-                  >
-                    <option value="">Seleziona una provincia</option>
-                  </select>
-                  ```
-                  </script>
-                </section>
-
-                 <section data-markdown>
-                  <script type="text/template">
-                  ng-class (1/2)
-                  
-                  <small>Permette di aggiungere o rimuovere una o più classi CSS ad un elemento.</small>
-
-                  <small>Esempio: vogliamo aggiungere una classe CSS `btn--active` a un bottone quando questo è attivo</small>
-                  ```html
-                  <label>Questo corso è interessante?</label>
-                  <button
-                    class="btn"
-                    ng-click="_my.response = 'Si'"
-                    ng-class="{'btn--active': _my.response === 'Si'}"
-                  >
-                    Si
-                  </button>
-                  <button
-                      class="btn"
-                      ng-click="_my.response = 'Assolutamente si'"
-                      ng-class="{'btn--active': _my.response === 'Assolutamente si'}"
-                    >
-                      Assolutamente si
-                  </button>
-                  ```
-
-                  [Play](https://codepen.io/_vik/pen/GWmYzy) <!-- .element: class="btn fragment" target="_blank" -->
-                  </script>
-                 </section>
-
-                 <section data-markdown>
-                  <script type="text/template">
-                  ng-class (2/2)
-
-                  <small>Esistono diversi modi di utilizzare `ng-class`</small>
-                  
-                  ```html
-                  <!-- Oggetto -->
-                  <button ng-class="{'btn--active': _my.isActive, 'btn--disabled': _.my.isDisabled}">
-                    Bottone 1
-                  </button>
-                  <!-- Stringa -->
-                  <article class="post" ng-class="{'post-id'+_my.post.id}">
-                    ...
-                  </article>
-                  <!-- Funzione -->
-                  <article ng-class="_my.getPostClasses(_my.post)">
-                    ...
-                  </article>
-                  ```
-                  </script>
-                 </section>
-
-                 <section data-markdown>
-                  <script type="text/template">
-                  ng-style (1/3)
-
-                  Permette di assegnare stile `inline` a un elemento. 
-                  
-                  Utile, ad esempio, per creare uno slideshow di immagini
-
-                  </script>
-                 </section>
-
-                 <section data-markdown>
-                  <script type="text/template">
-                  ng-style (2/3)
-
-                  <small>Come si relizza un semplice slideshow:</small>
-
-                  <img data-src="/images/slideshow-preparazione.jpg" class="fragment" style="max-width: 420px">
-
-                  <img data-src="/images/slideshow-slide-spostata.jpg" class="fragment" style="max-width: 420px">
-
-                  </script>
-                 </section>
-
-                  <section data-markdown>
-                    <script type="text/template">
-                    ng-style (3/3)
-
-                    ```html
-                    <div class="slideshow">
-                      <div class="slides" ng-style="_my.slideshowStyle">
-                        <div class="slide" ng-repeat="image in _my.images track by $index">
-                          <img ng-src="{{image}}" alt="">
-                    ```
-
-                    [Play](https://codepen.io/_vik/pen/jBmQbo) <!-- .element class="btn fragment" target="_blank" -->
-
-                    </script>
-                  </section>
-
-                 <section data-markdown data-background-color="#0084ff">
-                  <script type="text/template">
-                    # Capitolo II
                     ## La struttura di un'applicazione AngularJs
                   </script>
                 </section>
@@ -583,7 +127,7 @@
                     ])
                   ```
 
-                  `ngAnimation`, `ngSanitize` e ngCookie sono **moduli** di AngularJs che userete *sempre* nelle vostre app.
+                  `ngAnimation`, `ngSanitize` sono **moduli** di AngularJs che userete *sempre* nelle vostre app.
 
                   </script>
                 </section>
@@ -621,7 +165,7 @@
 
                 <section data-markdown>
                   <script type="text/template">
-                  `module` (4/2)
+                  `module` (4/4)
 
                   `module` svolge sia una funzione di *getter* che di *setter*.
                   
@@ -1083,7 +627,7 @@
 
                   ![](/images/emit-broadcast.png)
 
-                  Fonte: [Angular Zen](https://www.packtpub.com/books/content/angular-zen)
+                  <small>Fonte: [Angular Zen](https://www.packtpub.com/books/content/angular-zen)</small>
 
                   </script>
                 </section>
@@ -1274,9 +818,6 @@
                   <script type="text/template">
                   `$q` (2/3)
 
-                  Un oggetto `promise` espone una funzione `then` che viene automaticamente
-                  sollevata quando la promessa viane risolta o rifiutata.
-
                   ```javascript
                   function asincrona() {
                     var d = $q.deferr();
@@ -1299,22 +840,23 @@
                   <script type="text/template">
                   `$q` (3/3)
 
-                  Con l'uso della funzione `then()` possiamo recuperare il risultato.
+                  Un oggetto `promise` espone una funzione `then` che viene automaticamente
+                  sollevata quando la promessa viane risolta o rifiutata.
 
                   ```javascript
                   var promise = asincrona();
-                    promise.then(
-                      function(dati) {
-                        //La promessa è stata risolta, possiamo usare dati
-                        $scope.myVar = dati;
-                      },
-                      function(error) {
-                        //La promessa è stata rifiutata, gestiamo l'errore
-                      }
-                    )
-                    ```
-                    </script>
-                </section>
+                  promise.then(
+                    function(dati) {
+                      //La promessa è stata risolta, possiamo usare dati
+                      $scope.myVar = dati;
+                    },
+                    function(error) {
+                      //La promessa è stata rifiutata, gestiamo l'errore
+                    }
+                  )
+                  ```
+                  </script>
+              </section>
 
                 <section data-markdown>
                   <script type="text/template">
@@ -1345,6 +887,489 @@
 
                   </script>
                 </section>
+
+                <section data-markdown data-background-color="#0084ff">
+                  <script type="text/template">
+                    # Capitolo II
+                    ## Le primitive AngularJs
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ## Le primitive AngularJs
+
+                    Le primitive AngularJs sono attributi da assegnare
+                    ai nostri elementi HTML per integrare le funzionalità
+                    di Angular
+
+                    <pre><code data-noescape>
+                      &lt;div <mark>class="classe-css"</mark>&gt;...&lt;div&gt;
+                      &lt;img <mark>src="url-immagine"</mark>&gt;
+                    </code></pre>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-app e ng-controller
+
+                    `ng-app` indica al sistema il nome dell'applicazione AngularJs da eseguire
+
+                    ```html
+                    <body ng-app="myApp">
+                      <div ng-controller="myController as _my">
+                        <p>{{ _my.hi }}</p>
+                      </div>
+                    </body>
+                    ```
+                   
+                    <a href="https://codepen.io/_vik/pen/OpMLqx" class="btn" target="_blank">Play</a>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-model e ng-bind
+
+                    ```html
+                    <body ng-app="myApp">
+                      <div ng-controller="myController as _my">
+                        <input type="text" ng-model="_my.hi">
+                        <p ng-bind="_my.hi"></p>
+                      </div>
+                    </body>
+                    ```
+                   
+                    <a href="https://codepen.io/_vik/pen/dvGyGO" class="btn" target="_blank">Play</a>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-bind-html
+
+                    Se volessimo stampare una stringa che contiene codice HTML?
+                    ```javascript
+                    function HomeController() {
+                      this.intro = '<p>Saluti a <em>tutti</em></p>';
+                    }
+                    ```
+                    ```html
+                    <div ng-bind-html="$home.intro"></div>
+                    ```
+                    </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-click
+
+                    ```html
+                    <body ng-app="myApp">
+                      <div ng-controller="myController as _my">
+                        <input type="text" ng-model="_my.hi">
+                        <p ng-bind="_my.hi"></p>
+                        <button ng-click="_my.hi = 'buongiorno'">Buongiorno</button>
+                        <button ng-click="_my.reset()">Reset</button>
+                      </div>
+                    </body>
+                    ```
+                   
+                    <a href="https://codepen.io/_vik/pen/Vpewjp" class="btn" target="_blank">Play</a>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-repeat
+
+                    ```html
+                    <body ng-app="myApp">
+                      <div ng-controller="myController as _my">
+                        <ul>
+                          <li ng-repeat="user in _my.users track by $index">
+                            {{ user.firstName }}
+                            <a ng-click="_my.deleteUser($index, user)">&times;</a>
+                          </li> 
+                        </ul>
+                      </div>
+                    </body>
+                    ```
+
+                    <div class="fragment" style="font-size: 0.5em">
+                    **Fondamentale**: sempre fornire un 
+                    `track by` perché migliora le
+                    prestazioni di ng-repeat. Può essere $index
+                    (indice dell'array) o una proprietà degli
+                    elementi, come id. Nel secondo caso dobbiamo
+                    assicurarci che non ci siano duplicati nell'array
+                    </div>
+                   
+                    <a href="https://codepen.io/_vik/pen/YZwzYr" class="btn fragment" target="_blank">Play</a>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-show e ng-hide
+
+                    <small>Vogliamo nascondere gli utenti che hanno cognome troppo corto, meno di 4 lettere</small>
+
+                    ```html
+                    <body ng-app="myApp">
+                      <div ng-controller="myController as _my">
+                        <ul>
+                          <li 
+                            ng-repeat="user in _my.users track by $index" 
+                            ng-hide="user.lastName.length < 4"
+                          >
+                            {{ user.firstName }}
+                          </li> 
+                        </ul>
+                      </div>
+                    </body>
+                    ```
+
+                    <div class="fragment" style="font-size: 0.5em">
+                    **Attenzione**: l'elemento viene mostrato/nascosto via CSS `display: none !important`
+                    </div>
+                   
+                    <a href="https://codepen.io/_vik/pen/zZrYmK" class="btn fragment" target="_blank">Play</a>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-if
+
+                    <small>Riprendiamo l'esempio precedente. Se il controllo è "falso", l'emento non sarà visibile nell'HTML (nel codice vedremo solo una riga commentata)</small>
+
+                    ```html
+                    <body ng-app="myApp">
+                      <div ng-controller="myController as _my">
+                        <ul>
+                          <li 
+                            ng-repeat="user in _my.users track by $index" 
+                            ng-if="user.lastName.length > 3"
+                          >
+                            {{ user.firstName }}
+                          </li> 
+                        </ul>
+                      </div>
+                    </body>
+                    ```
+
+                  </script>
+                </section>
+                
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-switch (1/2)
+
+                    Se i nostri utenti hanno un ruolo, vogliamo stampare: 
+                    * in grassetto gli utenti "ADMIN"
+                    * in corsivo i "DEVELOPER"
+                    * normale tutti gli altri
+                    
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-switch (2/2)
+
+                    ```html
+                    <body ng-app="myApp">
+                      <div ng-controller="myController as _my">
+                        <ul>
+                          <li 
+                            ng-repeat="user in _my.users track by $index" 
+                            ng-switch="user.role"
+                          >
+                            <strong ng-switch-when="ADMIN">
+                              {{ user.firstName }} (amministratore)
+                            </strong>
+                            <em ng-switch-when="DEVELOPER">
+                              {{ user.firstName }} (sviluppatore)
+                            </em>
+                            <span ng-switch-default>
+                              {{ user.firstName }}
+                            </span>
+                          </li> 
+                        </ul>
+                      </div>
+                    </body>
+                    ```
+
+                    <small class="fragment">Per funzionare un elemento `ng-switch-default` è necessario
+                    <a href="https://codepen.io/_vik/pen/jBWEGq" class="btn fragment" target="_blank">Play</a>
+                  </script>
+                </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                    ng-required
+                  
+                    <img data-src="images/form_ng-required.png">
+                  
+                    Vogliamo che il campo "P. IVA" sia *required* solo se la checkbox è selezionata
+                    <a href="https://codepen.io/_vik/pen/MpeZEW" class="btn fragment" target="_blank">Play</a>
+
+                    <small class="fragment">Dare sempre feedback agli utenti: rendiamo evidenti i campi che sono (o diventano) obbligatori</small>
+
+                  </script>
+                </section>
+                
+                
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-disabled
+
+                    Riprendiamo l'esempio precedente: non vogliamo che l'utente possa inviare la form finché non compila il campo "Nome e cognome"
+
+                    ```html
+                    ...
+                    <button 
+                      ng-disabled="!_my.user.fullName" 
+                      type="submit" 
+                      class="btn btn-primary"
+                    >
+                      Invia
+                    </button>
+                    ```
+                    
+                    <a href="https://codepen.io/_vik/pen/LWZMvO" class="btn fragment" target="_blank">Play</a>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ng-submit
+
+                    Permette di eseguire una funzione quando la form viene *inviata* (submitted)
+
+                    ```html
+                    <form 
+                      ng-submit="_my.submit()"
+                      class="form-horizontal"
+                    >
+                      ...
+                    </form>
+                    ```
+
+                    [Play](https://codepen.io/_vik/pen/mWEaZz) <!-- .element: class="btn fragment" target="_blank" -->
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ng-options (1/3)
+
+                  Si utilizza nelle `<select>` per valizzare i campi `<option>`
+                  
+                  Permette di valorizzare sia l'attributo `value` che la *label* mostrata all'utente
+                  ```html
+                  <select>
+                    <option value="1">Descrizione 1</option>
+                    <option value="2">Descrizione 2</option>
+                    ...
+                  </select>
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ng-options (2/3)
+
+                  Prendiamo un `array` contenente i possibili ruoli da assegnare ad un utente
+                  
+                  ```javascript
+                      this.userRoles = [
+                        {
+                          'id': 'ADMIN',
+                          'description': 'Amministratore' 
+                        },
+                        {
+                          'id': 'DEVELOPER',
+                          'description': 'Sviluppatore' 
+                        },
+                        {
+                          'id': 'BASE',
+                          'description': 'Altro' 
+                        }
+                      ]
+                          
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ng-options (3/3)
+
+                  ```html
+                  <select 
+                    ng-model="_my.user.role"
+                    ng-options="role.id as role.description for role in _my.userRoles"
+                  >
+                    <option value="">Seleziona ruolo</option>
+                  </select>
+                  <p ng-bind="_my.user.role"></p>
+                  ```
+                  
+                  NB: <!-- .element class="fragment small" -->
+
+                  <ul class="small">
+                    <li class="fragment">nella variabile associata a `ng-model` verrà salvato l'id</li>
+                    <li class="fragment">un'opzione vuota `<option value=""></option>` è sempre necessaria
+                  </ul>
+
+                  [Play](https://codepen.io/_vik/pen/MpeLbJ) <!-- .element: class="btn fragment" target="_blank" -->
+                  </div>
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ng-change (1/2)
+
+                  Permette di eseguire una funzione quando un dato campo di input cambia il proprio valore
+                  a seguito di un'azione dell'utente. 
+
+                  Di solito si utilizza per svolgere una logica quando l'utente seleziona
+                  un valore di una `<select>`
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ng-change (2/2)
+
+                  Esempio classico: abbiamo due select con Regione e Provincia, quando l'utente seleziona una certa Regione è necessario filtrare le Province <!-- .element: class="small" -->
+
+                  ```html
+                  <select
+                    name="regione"
+                    ng-model="_my.user.area"
+                    ng-change="_my.updateProvinceList()"
+                    ng-options="area.id as area.description for area in _my.areaList"
+                  >
+                    <option value="">Seleziona una regione</option>
+                  </select>
+                  <select
+                    name="provincia"
+                    ng-disabled="!_my.user.area"
+                    ng-model="_my.user.province"
+                    ng-options="province.id as province.description for province in _my.provinceList"
+                  >
+                    <option value="">Seleziona una provincia</option>
+                  </select>
+                  ```
+                  </script>
+                </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  ng-class (1/2)
+                  
+                  <small>Permette di aggiungere o rimuovere una o più classi CSS ad un elemento.</small>
+
+                  <small>Esempio: vogliamo aggiungere una classe CSS `btn--active` a un bottone quando questo è attivo</small>
+                  ```html
+                  <label>Questo corso è interessante?</label>
+                  <button
+                    class="btn"
+                    ng-click="_my.response = 'Si'"
+                    ng-class="{'btn--active': _my.response === 'Si'}"
+                  >
+                    Si
+                  </button>
+                  <button
+                      class="btn"
+                      ng-click="_my.response = 'Assolutamente si'"
+                      ng-class="{'btn--active': _my.response === 'Assolutamente si'}"
+                    >
+                      Assolutamente si
+                  </button>
+                  ```
+
+                  [Play](https://codepen.io/_vik/pen/GWmYzy) <!-- .element: class="btn fragment" target="_blank" -->
+                  </script>
+                 </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  ng-class (2/2)
+
+                  <small>Esistono diversi modi di utilizzare `ng-class`</small>
+                  
+                  ```html
+                  <!-- Oggetto -->
+                  <button ng-class="{'btn--active': _my.isActive, 'btn--disabled': _.my.isDisabled}">
+                    Bottone 1
+                  </button>
+                  <!-- Stringa -->
+                  <article class="post" ng-class="{'post-id'+_my.post.id}">
+                    ...
+                  </article>
+                  <!-- Funzione -->
+                  <article ng-class="_my.getPostClasses(_my.post)">
+                    ...
+                  </article>
+                  ```
+                  </script>
+                 </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  ng-style (1/3)
+
+                  Permette di assegnare stile `inline` a un elemento. 
+                  
+                  Utile, ad esempio, per creare uno slideshow di immagini
+
+                  </script>
+                 </section>
+
+                 <section data-markdown>
+                  <script type="text/template">
+                  ng-style (2/3)
+
+                  <small>Come si relizza un semplice slideshow:</small>
+
+                  <img data-src="/images/slideshow-preparazione.jpg" class="fragment" style="max-width: 420px">
+
+                  <img data-src="/images/slideshow-slide-spostata.jpg" class="fragment" style="max-width: 420px">
+
+                  </script>
+                 </section>
+
+                  <section data-markdown>
+                    <script type="text/template">
+                    ng-style (3/3)
+
+                    ```html
+                    <div class="slideshow">
+                      <div class="slides" ng-style="_my.slideshowStyle">
+                        <div class="slide" ng-repeat="image in _my.images track by $index">
+                          <img ng-src="{{image}}" alt="">
+                    ```
+
+                    [Play](https://codepen.io/_vik/pen/jBmQbo) <!-- .element class="btn fragment" target="_blank" -->
+
+                    </script>
+                  </section>
 
                 <section data-markdown data-background-color="#0084ff">
                   <script type="text/template">
@@ -1747,7 +1772,7 @@
 
                 <section data-markdown>
                   <script type="text/template">
-                  2 Dettaglio utente /users/list
+                  2 Dettaglio utente /users/detail
 
                   Quindi lo stato **figlio**
                   ```javascript
