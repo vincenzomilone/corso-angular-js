@@ -2215,11 +2215,277 @@
                   </script>
                 </section>
 
-                <section data-markdown data-background-color="#0084ff">
+                <section data-markdown>
                   <script type="text/template">
-                  # Fine
+                  Installiamo la II applicazione.
+
+                  Inanzitutto dobbiamo già aver installato
+                  * node e npm https://nodejs.org/it/
+                  * git https://git-scm.com/downloads
+
+                  Quindi scarichiamo l'applicazione utilizzaondo il comando
+                  ```
+                  git clone https://github.com/vincenzomilone/corso-angular-02.git
+                  ```
                   </script>
                 </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Eseguiamo la II applicazione.
+
+                  Entriamo nella cartella appena creata `corso-angular-02`
+                  e installiamo le dipendenze con
+                  ```
+                  npm install && bower install
+                  ```
+                  
+                  quindi lanciamo con 
+                  ```
+                  gulp serve
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown data-background-color="#0084ff">
+                  <script type="text/template">
+                  # A fine corso...
+
+                  * html5mode <!-- .element class="fragment" -->
+                  * problemi SEO per applicazioni pubbliche <!-- .element class="fragment" -->                  
+                  * $scope.$apply() <!-- .element class="fragment" -->
+                  * prepararsi ad Angular 2 con le componenti Angular <!-- .element class="fragment" -->
+                  * material design <!-- .element class="fragment" -->
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  # HTML5 mode
+
+                  Abbiamo visto che le url delle nostre applicazioni sono nella 
+                  forma `/#/users`. Ma se volessimo delle url senza il # all'inizio?
+
+                  ```javascript
+                  angular
+                    .module('nomeModule')
+                    .config(['$locationProvider', mainConfig])
+
+                  function mainConfig($locationProvider) {
+                    $locationProvider.html5Mode(true);
+                  }
+                  ```
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Questa configurazione ci crea un problema:
+                  mettiamo che atterriamo nella url 
+                  ```
+                  http://www.myapp.com/users
+                  ```
+                  il nostro server (es: Apache) andrà a cercare una cartella o un file `/users`
+                  e non lo troverà: errore 404.
+
+                  <div class="fragment small">
+                  Dobbiamo configurare così il file `.htaccess`
+
+                  <pre><code>RewriteEngine On
+                  # If an existing asset or directory is requested go to it as it is
+                  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+                  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+                  RewriteRule ^ - [L]
+                  # If the requested resource doesn't exist, use index.html
+                  RewriteRule ^ /index.html
+                  </code></pre>
+
+                  <small>Fonte: https://ngmilk.rocks/2015/03/09/angularjs-html5-mode-or-pretty-urls-on-apache-using-htaccess/</small>
+                  </div>
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  ## Problemi SEO
+
+                  Google è in grado di eseguire un'applicazione realizzata in AngularJs con html5mode, ma bing, facebook e twitter **no**.
+
+                  A tal proprosito ci viene in aiuto:
+                  https://prerender.io/
+
+                  <small>È un servizio esterno che effettua il pre-rendering delle pagine, le salva in una cache, e serviamo a bing/facebook/twitter
+                  la pagiana già "pronta", *girando* la richiesta a:
+                  http://service.prerender.io/http://www.myapp.com/users</small>
+
+                  <small>Per fare questo dobbiamo configurare adeguatamente il nostro file .htaccess
+                  https://gist.github.com/thoop/8072354</small>
+
+                  </script>
+                </section>
+
+                
+                <section data-markdown>
+                  <script type="text/template">
+                  $scope.$apply()
+
+                  <small>Abbiamo visto che lo $scope ha una forma ad albero, per effettuare il binding fra Vista e Modello (e viceversa)
+                  Angular aggiorna l'interno albero dalla radice alle foglie.</small>
+
+                  Il processo di aggiornamento dell'alberatura si chiama *digest*.
+
+                  ![](/images/emit-broadcast.png)
+
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Cosa accade se lavoriamo "fuori" da questa alberatura?
+
+                  ```javascript
+                  function ResizeController($scope) {
+                    $scope.windowWidth = $(window).width();
+                    $(window).on('resize', function() {
+                      $scope.windowWidth = $(window).width();
+                    }) 
+                  }
+                  ```
+
+                  La variabile `$scope.windowWidth` non si aggirna perché l'evento `.on('resize'` è fuori dalla della *digest*
+                  </script>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                  Come si risolve?
+
+                  Metodo 1
+                  ```javascript
+                  function ResizeController($scope) {
+                    $scope.windowWidth = $(window).width();
+                    $(window).on('resize', function() {
+                      $scope.windowWidth = $(window).width();
+                      $scope.$apply();
+                    }) 
+                  }
+                  ```
+
+                  Metodo 2
+                  ```javascript
+                  function ResizeController($scope, $timeout) {
+                    $scope.windowWidth = $(window).width();
+                    $(window).on('resize', function() {
+                      $timeout(function() {
+                        $scope.windowWidth = $(window).width();
+                      })
+                    })
+                  }
+                  ```
+                  </script>
+              </section>
+
+              <section data-markdown>
+                <script type="text/template">
+                ## Le componenti di AngularJs 1.5
+
+                <small>Dato che Angular 2 è strutturato in *componenti*, per abituarci a questo metodo
+                in Angular 1.5 sono state introdotte le `component()`</small>
+
+                ```javascript
+                angular
+                  .module('ngUsers')
+                  .component('usersTable', {
+                    templateUrl: 'users-table.html',
+                    controller: UsersTableController,
+                    controllerAs: '$usersTable'
+                    bindings: {
+                      list: '@'
+                    }
+                });
+                ```
+
+                ```html
+                <users-table list="$users.users"></users-table>
+                ```
+                </script>
+              </section>
+
+              <section data-markdown class="small">
+                <script type="text/template">
+                In pratica è una direttiva con alcune differenza
+
+                |Direttiva|Componente|
+                |---------|----------|
+                |Si instanzia come una funzionne|Si instanzia come un oggetto di configurazione|
+                |`restrict` può valere 'A','E' o 'AE'|È per forza un elemento|
+                |Si può usare un controller o la funzione `link()`|Per forza un controller|
+                |bindToController|bindings|
+              
+                </script>
+              </section>
+
+              <section data-markdown>
+                <script type="text/template">
+                Inoltre abbiamo un nuovo tipo di bind oltre a '=', '@', ovvero '<'
+
+                Si tratta di un bind **one-way**
+
+                ```html
+                <my-component my-attr="parentModel"></my-component>
+                ```
+
+                Se il controller "parent" modifica la sua variabile parentModel, la modifica si riflette nella direttiva,
+                ma **non è vero il viceversa**.
+
+                </script>
+              </section>
+              
+              <section data-markdown>
+                <script type="text/template">
+                ## material design
+                
+                Come realizzare un'applicazione AngularJs in material design?
+
+                Utilizziamo angular-material, modulo **ufficiale** per Angular 1
+                https://material.angularjs.org/latest/
+
+                ```
+                bower install angular-material --save
+                ```
+
+                </script>
+              </section>
+
+               <section data-markdown>
+                <script type="text/template">
+                `ngMaterial`
+
+                Aggiungiamo `ngMaterial` alle nostre dipendenze
+
+                ```javascript
+                angular
+                  .module('nomeModulo', [
+                    'ngSanitize',
+                    'ngAnimate',
+                    'ngMaterial'
+                  ])                  
+                ```
+
+                e possiamo iniziare a usare le direttive che ci mette a disposizione
+
+                [Documentazione](/https://material.angularjs.org/latest/demo/button) <!-- .element class="btn fragment" target="_blank" -->
+
+                </script>
+               </section>
+
+              <section data-markdown data-background-color="#0084ff">
+                <script type="text/template">
+                # Fine
+                </script>
+              </section>
+
             </div>
         </div>
         <script src="node_modules/headjs/dist/1.0.0/head.min.js"></script>

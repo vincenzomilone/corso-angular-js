@@ -86,11 +86,12 @@ Integrazione del framework Bootstrap nel frontend.
 |III applicazione|Modifica di un utente. Validare una form.|[Link](https://github.com/vincenzomilone/corso-angular-03)
 |IV applicazione|Internalizzazione dell'app|[Link](https://github.com/vincenzomilone/corso-angular-04)
 
-## Argomenti avanzati
+## A fine corso...
 
-* prepararsi ad Angular 2 con le componenti Angular 1.5
+* html5mode
+* problemi SEO per applicazioni pubbliche                  
+* $scope.$apply()
+* prepararsi ad Angular 2 con le componenti Angular
 * material design
-* sicurezza e cookie
-* problemi SEO per applicazioni pubbliche
 
 Vincenzo Milone
