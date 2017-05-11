@@ -25,6 +25,7 @@ http://localhost:8080/
 ## Applicazioni di esempio
 
 Nel corso sono presenti alcune applicazioni di esempio:
+
 |Applicazione|Scopo|Link|
 |------------|-----|----|
 |I applicazione|Mostrare l'uso di UI-Router|[Link](https://github.com/vincenzomilone/corso-angular-01)
